@@ -1,6 +1,6 @@
 namespace AiRTIST.Enum;
 
-public enum PositiveTraits
+public enum PositiveTrait
 {
     Beauty,
     Courage,

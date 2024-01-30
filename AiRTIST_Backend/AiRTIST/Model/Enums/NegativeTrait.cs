@@ -1,6 +1,6 @@
 namespace AiRTIST.Enum;
 
-public enum NegativeTraits
+public enum NegativeTrait
 {
     Arrogance,
     Betrayal,

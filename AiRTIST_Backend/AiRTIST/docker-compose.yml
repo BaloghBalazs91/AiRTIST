@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: AiRTIST
+      POSTGRES_USER: bb
+      POSTGRES_PASSWORD: Blay12345@
