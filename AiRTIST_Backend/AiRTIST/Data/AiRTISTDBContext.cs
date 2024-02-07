@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using AiRTIST.Model;
-using AiRTIST.Enum;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AiRTIST.Data
 {
-    public class AiRTISTDBContext : DbContext
+    public class AiRTISTDBContext : IdentityDbContext<IdentityUser>
     {
-        public DbSet<Poem> Poets { get; set; }
+        public DbSet<Poem> Poems { get; set; }
 
         public AiRTISTDBContext(DbContextOptions<AiRTISTDBContext> options) : base(options)
         {
@@ -14,8 +15,10 @@ namespace AiRTIST.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Poem>()
-                .HasKey(p => p.PoemId); // Assuming "PoetId" is your primary key property
+                .HasKey(p => p.PoemId);
 
             modelBuilder.Entity<Poem>()
                 .HasOne(p => p.User)
@@ -24,4 +27,3 @@ namespace AiRTIST.Data
         }
     }
 }
-

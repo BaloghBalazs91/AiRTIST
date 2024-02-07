@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace AiRTIST.Model
@@ -5,20 +6,22 @@ namespace AiRTIST.Model
     public class Poem
     {
         public int PoemId { get; set; }
-        public string GeneratedPoet { get; set; }
-        public string UserId { get; set; } // Foreign key
-        public IdentityUser User { get; set; } // Navigation property
+        public string GeneratedPoem { get; set; }
+        public string UserId { get; set; }
         public int Rating { get; set; }
         public int Views { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public Poem(string generatedPoet, string userId)
+        // Navigation property for the related User
+        public IdentityUser User { get; set; }
+
+        public Poem(string generatedPoem, string userId)
         {
             Rating = 0;
             Views = 0;
-            GeneratedPoet = generatedPoet;
+            GeneratedPoem = generatedPoem;
             UserId = userId;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.Now.ToUniversalTime();
         }
     }
 }

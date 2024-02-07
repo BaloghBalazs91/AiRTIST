@@ -1,11 +1,12 @@
 using AiRTIST.Data;
 using AiRTIST.Service.Authentication;
-//using AiRTIST.Service.Repositories;
+using AiRTIST.Service.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AiRTIST.Service.Repositories;
 using Microsoft.OpenApi.Models;
 
 
@@ -117,15 +118,12 @@ public class Program
             {
                 options.UseNpgsql(configuration.GetConnectionString("PostgreSQL"));    
             });
-
-            builder.Services.AddDbContext<UsersContext>(options =>
-            {
-                options.UseNpgsql(configuration.GetConnectionString("PostgreSQL"));    
-            });
+            
 
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-        }    
+            builder.Services.AddScoped<IUserMethods, PoemService>();
+        }
 
 
         void AddAuthentication()
@@ -145,7 +143,7 @@ public class Program
                         ValidIssuer = "apiWithAuthBackend",
                         ValidAudience = "apiWithAuthBackend",
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes("!SomethingSecret!")
+                            Encoding.UTF8.GetBytes("YourLongAndSecureSecretKeyHereWithAtLeast256Bits")
                 
                     
                         ),
@@ -168,7 +166,7 @@ public class Program
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
                 }).AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<UsersContext>();
+                .AddEntityFrameworkStores<AiRTISTDBContext>();
         }
 
         void AddRoles()

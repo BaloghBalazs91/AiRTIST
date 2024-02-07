@@ -63,7 +63,7 @@ namespace AiRTIST.Service.Authentication
         {
             return new SigningCredentials(
                 new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("!SomethingSecret!")
+                    Encoding.UTF8.GetBytes("YourLongAndSecureSecretKeyHereWithAtLeast256Bits")
                 ),
                 SecurityAlgorithms.HmacSha256
             );
