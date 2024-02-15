@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using AiRTIST.Service.Repositories;
+using AiRTIST.Service.OpenAIService;
 using Microsoft.OpenApi.Models;
 
 
@@ -18,9 +18,12 @@ public class Program
 
         var configuration = builder.Configuration;
 
+        configuration.AddUserSecrets<Program>();
+        
         AddServices();
         ConfigureSwagger();
         AddDbContext(configuration);
+        AddOpenAIConfig();
         AddAuthentication();
         AddIdentity();
 
@@ -118,12 +121,17 @@ public class Program
             {
                 options.UseNpgsql(configuration.GetConnectionString("PostgreSQL"));    
             });
-            
 
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IUserMethods, PoemService>();
         }
+
+        void AddOpenAIConfig()
+        {
+            builder.Services.AddSingleton<OpenAIService>();
+        }
+        
 
 
         void AddAuthentication()

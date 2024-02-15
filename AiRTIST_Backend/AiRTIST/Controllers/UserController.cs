@@ -4,18 +4,24 @@ using AiRTIST.Service.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AiRTIST.Model;
+using AiRTIST.Service.OpenAIService;
+using Azure.AI.OpenAI;
 
 namespace AiRTIST.Controllers{
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "User, Admin")]
+    //[Authorize(Roles = "User, Admin")]
     public class UserController : ControllerBase
     {
         private readonly IUserMethods _userMethods;
+        private readonly OpenAIService _openAiService;
 
-        public UserController(IUserMethods userMethods)
+        
+        public UserController(IUserMethods userMethods, OpenAIService openAiService)
         {
+            _openAiService = openAiService;
             _userMethods = userMethods;
+
         }
 
         [HttpGet("GetAllPoems")]
@@ -23,6 +29,26 @@ namespace AiRTIST.Controllers{
         {
             return Ok(await _userMethods.GetAllPoemsAsync());
         }
+        
+
+        [HttpPost("GenerateText")]
+        public async Task<IActionResult> GenerateText([FromBody] string prompt)
+        {
+            try
+            {
+                var generatedText = await _openAiService.MakeChatRequestAsync(prompt);
+
+                if (generatedText != null)
+                    return Ok(generatedText);
+                else
+                    return BadRequest("Failed to generate text.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+
 
         [HttpPost("AddPoem")]
         public async Task<IActionResult> AddPoem([FromBody] NewPoemRequest request)
@@ -92,7 +118,5 @@ namespace AiRTIST.Controllers{
                 return BadRequest(result.Message);
             }
         }
-        
-
     }
 }
