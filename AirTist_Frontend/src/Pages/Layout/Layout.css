@@ -1,0 +1,56 @@
+.Layout nav {
+  background-color: black;
+}
+
+.main-ul {
+  margin-top: 0%;
+  margin-bottom: 0%;
+  margin-right: 10%;
+  margin-left: 10%;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.Layout nav ul li {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.navBtn {
+  font-weight: bold;
+  padding: 10px;
+  color: white;
+  background: none;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+}
+
+.navBtn:hover {
+  background-color: black;
+  color: #f6e839;
+  box-shadow: 0px 0px 5px #f6e839;
+}
+
+.mainLogo {
+  padding: 20px;
+  height: 80px;
+
+}
+
+.mainLogo:hover {
+  transform: scale(1.05);
+}
+
+.loginLi {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 0%;
+  margin-bottom: 0%;
+}

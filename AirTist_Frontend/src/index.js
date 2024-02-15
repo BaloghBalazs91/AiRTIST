@@ -1,17 +1,57 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
+import Layout from './Pages/Layout/Layout.jsx';
+import Registration from './Pages/Registration.jsx';
+import Login from './Pages/Login.jsx';
+import User from './Pages/User.jsx';
+import Home from './Pages/Home.jsx';
+import { AuthProvider } from './Components/AuthContext.jsx';
+import CreatePoem from './Pages/CreatePoem.jsx';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+
+const router = createBrowserRouter([
+
+  {
+    path: '/',
+    element: <Layout />,
+    // errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/Register',
+        element: <Registration />,
+      },
+      {
+        path: '/Login',
+        element: <Login />,
+      },
+      {
+        path: '/User',
+        element: <User />,
+      },
+      {
+        path: '/CreatePoem',
+        element: <CreatePoem />,
+      }
+    ]
+  }
+]);
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <RouterProvider router={router}>
+        {router.route}
+      </RouterProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
 reportWebVitals();
