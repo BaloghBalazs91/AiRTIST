@@ -16,30 +16,36 @@ const CreatePoem = () => {
     });
 
     const [responseState, setResponseState] = useState('');
+    const [errorState, setErrorState] = useState('');
 
     const handleInputChange = (e) => {
         setFormData({ ...formdata, [e.target.name]: e.target.value });
-    }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorState('');
+
+
+        const prompt = `name: ${formdata.Name}, nickName: ${formdata.Nickname}, age: ${formdata.Age}, occasion: ${formdata.Occasion}, profession: ${formdata.Profession}, hobbies: ${formdata.Hobbies}, positiveTraits: ${formdata.PositiveTraits}, negativeTraits: ${formdata.NegativeTraits}, interestingStory: ${formdata.InterestingStory}`;
+
         try {
-            const response = await axios.post('api/User/GenerateText', formdata);
+            const response = await axios.post('/api/User/GenerateText', { prompt });
 
             if (response && response.data) {
                 console.log(response.data);
-                setResponseState(response.data);
+                setResponseState(response.data.content || 'No content generated.');
             } else {
                 console.error('Invalid response:', response);
-                setResponseState(response.data);
+                setErrorState(`Invalid response or error occurred: ${JSON.stringify(response)}`);
             }
         } catch (error) {
             if (error.response && error.response.data) {
                 console.error('Setting role failed:', error.response.data);
-                setResponseState(error.response.data);
+                setErrorState(`Error: ${JSON.stringify(error.response.data)}`);
             } else {
                 console.error('Unexpected error:', error);
-                setResponseState(error.response.data);
+                setErrorState(`Unexpected error occurred: ${error.message}`);
             }
         }
     };
@@ -55,22 +61,14 @@ const CreatePoem = () => {
                     />
                 </div>
             ) : (
-                responseState.message === 'Request failed with status code 405' ? (
-                    <div className='createPoem'>
-                        <div className='error-text'>
-                            Request failed with status code 405
-                        </div>
-                        <PersonForm
-                            handleSubmit={handleSubmit}
-                            formdata={formdata}
-                            handleInputChange={handleInputChange}
-                        />
-                    </div>
-                ) : (
-                    <div>
-                        {responseState.completion.choices[0].message.content}
-                    </div>
-                )
+                <div>
+                    <pre>{responseState}</pre>
+                </div>
+            )}
+            {errorState && (
+                <div className="error">
+                    <pre>{errorState}</pre>
+                </div>
             )}
         </div>
     );
