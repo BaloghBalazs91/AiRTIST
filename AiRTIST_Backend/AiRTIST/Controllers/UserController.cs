@@ -1,4 +1,5 @@
 
+using System.Text.Json;
 using AiRTIST.Contracts;
 using AiRTIST.Service.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -32,20 +33,21 @@ namespace AiRTIST.Controllers{
         
 
         [HttpPost("GenerateText")]
-        public async Task<IActionResult> GenerateText([FromBody] string prompt)
+        public async Task<IActionResult> GenerateText([FromBody] PromptRequest request)
         {
             try
             {
-                var generatedText = await _openAiService.MakeChatRequestAsync(prompt);
+                var response = await _openAiService.MakeChatRequestAsync(request.Prompt);
+                var content = ExtractGeneratedContentFromResponse(response);
 
-                if (generatedText != null)
-                    return Ok(generatedText);
+                if (content != null)
+                    return Ok(new { content });
                 else
                     return BadRequest("Failed to generate text.");
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest(new { error = $"Error: {ex.Message}" });
             }
         }
 
@@ -117,6 +119,18 @@ namespace AiRTIST.Controllers{
             {
                 return BadRequest(result.Message);
             }
+        }
+        private string ExtractGeneratedContentFromResponse(string response)
+        {
+            // Mintapéldány JSON parse logika, feltételezve, hogy a válasz szerkezete hasonló a példáéhoz
+            var jsonDoc = JsonDocument.Parse(response);
+            var choices = jsonDoc.RootElement.GetProperty("choices");
+            if (choices.GetArrayLength() > 0)
+            {
+                var content = choices[0].GetProperty("message").GetProperty("content").GetString();
+                return content;
+            }
+            return null;
         }
     }
 }
