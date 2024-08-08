@@ -1,5 +1,6 @@
 
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 
 namespace AiRTIST.Service.OpenAIService
@@ -18,7 +19,7 @@ namespace AiRTIST.Service.OpenAIService
 
         public async Task<string> MakeChatRequestAsync(string prompt)
         {
-            var jsonString = $"{{\"model\": \"gpt-3.5-turbo\",\"messages\": [{{\"role\": \"system\",\"content\": \"{prompt}\"}}]}}";
+            var jsonString = $"{{\"model\": \"gpt-3.5-turbo\",\"messages\": [{{\"role\": \"system\",\"content\": \"make a poem about my friend: {prompt}\"}}]}}";
 
             var content = new StringContent(jsonString, null, "application/json");
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions");
@@ -27,7 +28,10 @@ namespace AiRTIST.Service.OpenAIService
 
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var parsedResponse = JsonDocument.Parse(responseContent);
+            return responseContent;
         }
     }
 }
