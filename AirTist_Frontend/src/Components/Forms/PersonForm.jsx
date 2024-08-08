@@ -11,9 +11,10 @@ const PersonForm = ({ handleSubmit, formdata, handleInputChange }) => {
             <input type='text' placeholder='Hobbies' name='Hobbies' value={formdata.Hobbies} onChange={handleInputChange} required />
             <input type='text' placeholder='PositiveTraits' name='PositiveTraits' value={formdata.PositiveTraits} onChange={handleInputChange} required />
             <input type='text' placeholder='NegativeTraits' name='NegativeTraits' value={formdata.NegativeTraits} onChange={handleInputChange} required />
-            <input type='text' placeholder='An Interesting Story' name='InterestingStory' value={formdata.InterestingStory} onChange={handleInputChange} style={{ height: '150px', /* Tetszőleges méret */ }} required />
-            <button type='submit' className='submitBtn'>Send</button>
+            <input type='text' placeholder='An Interesting Story' name='InterestingStory' value={formdata.InterestingStory} onChange={handleInputChange} style={{ height: '150px' }} required />
+            <button type='submit' className='submitBtn'>Create</button>
         </form>
     )
 };
+
 export default PersonForm;
