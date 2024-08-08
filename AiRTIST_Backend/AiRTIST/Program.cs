@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 using AiRTIST.Service.OpenAIService;
 using Microsoft.OpenApi.Models;
 
@@ -23,7 +24,7 @@ public class Program
         AddServices();
         ConfigureSwagger();
         AddDbContext(configuration);
-        AddOpenAIConfig();
+        AddOpenAiConfig();
         AddAuthentication();
         AddIdentity();
 
@@ -79,6 +80,11 @@ public class Program
         {
             // Add services to the container.
             builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             builder.Services.AddEndpointsApiExplorer();
         }
 
@@ -127,7 +133,7 @@ public class Program
             builder.Services.AddScoped<IUserMethods, PoemService>();
         }
 
-        void AddOpenAIConfig()
+        void AddOpenAiConfig()
         {
             builder.Services.AddSingleton<OpenAIService>();
         }
