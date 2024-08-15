@@ -8,7 +8,7 @@ import { useAuth } from '../../Components/AuthContext.jsx';
 
 const Layout = () => {
 
-    const { loggedIn, logout, login } = useAuth();;
+    const { loggedIn, logout, login } = useAuth();
     const navigate = useNavigate();
     const userRole = JSON.parse(localStorage.getItem('role'));
     const [lastClickedButton, setLastClickedButton] = useState(null);
