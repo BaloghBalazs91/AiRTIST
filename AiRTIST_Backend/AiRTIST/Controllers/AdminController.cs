@@ -33,7 +33,7 @@ namespace AiRTIST.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(new AuthenticationResponse(result.Email, result.UserName, ""));
+            return Ok(new AuthenticationResponse(result.Email, result.UserName, "", result.Id));
         }
 
         private void AddErrors(AuthenticationResult result)

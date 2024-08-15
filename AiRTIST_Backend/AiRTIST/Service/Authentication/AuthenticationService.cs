@@ -24,12 +24,12 @@ namespace AiRTIST.Service.Authentication{
             }
             await SetRole(user.UserName, role);
 
-            return new AuthenticationResult(true, email, username, "");
+            return new AuthenticationResult(true, email, username, "", "");
         }
 
         private static AuthenticationResult FailedRegistration(IdentityResult result, string email, string username)
         {
-            var authResult = new AuthenticationResult(false, email, username, "");
+            var authResult = new AuthenticationResult(false, email, username, "", "");
 
             foreach (var error in result.Errors)
             {
@@ -57,19 +57,19 @@ namespace AiRTIST.Service.Authentication{
             var roles = await _userManager.GetRolesAsync(managedUser);
             var accessToken = _tokenService.CreateToken(managedUser, roles.Last());
 
-            return new AuthenticationResult(true, managedUser.Email, managedUser.UserName, accessToken);
+            return new AuthenticationResult(true, managedUser.Email, managedUser.UserName, accessToken, managedUser.Id);
         }
 
         private static AuthenticationResult InvalidUsername(string username)
         {
-            var result = new AuthenticationResult(false, "", username, "");
+            var result = new AuthenticationResult(false, "", username, "", "");
             result.ErrorMessages.Add("Bad credentials", "Invalid username");
             return result;
         }
 
         private static AuthenticationResult InvalidPassword(string email, string userName)
         {
-            var result = new AuthenticationResult(false, email, userName, "");
+            var result = new AuthenticationResult(false, email, userName, "", "");
             result.ErrorMessages.Add("Bad credentials", "Invalid password");
             return result;
         }
@@ -85,7 +85,7 @@ namespace AiRTIST.Service.Authentication{
             await _userManager.RemoveFromRolesAsync(managedUser, roles);
             await _userManager.AddToRoleAsync(managedUser, role);
 
-            return new AuthenticationResult(true, managedUser.Email, managedUser.UserName, "");
+            return new AuthenticationResult(true, managedUser.Email, managedUser.UserName, "", managedUser.Id);
         }
 
         public async Task<IList<string>> GetRoles(string userName)

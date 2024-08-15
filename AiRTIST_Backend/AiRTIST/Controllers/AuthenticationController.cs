@@ -67,7 +67,7 @@ namespace AiRTIST.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(new AuthenticationResponse(result.Email, result.UserName, result.Token));
+            return Ok(new AuthenticationResponse(result.Email, result.UserName, result.Token, result.Id));
         }
 
         [HttpPost("Roles")]
